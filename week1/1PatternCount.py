@@ -1,4 +1,4 @@
-def findPattern(string, pattern):
+def PatternCount(string, pattern):
     length_str = len(string)
     length_pat = len(pattern)
     count = 0
@@ -20,5 +20,3 @@ def PatternCount(Text, Pattern):
     return len(matches)
 
 '''
-
-print findPattern("CGCGATACGTTACATACATGATAGACCGCGCGCGATCATATCGCGATTATC", "CGCG")

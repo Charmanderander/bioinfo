@@ -1,4 +1,4 @@
-def freqPattern(string, k):
+def FrequentWords(string, k):
     length_str = len(string)
     count = []
     freq_pat = []
