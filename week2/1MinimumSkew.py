@@ -18,7 +18,5 @@ def MinimumSkew(Genome):
 
     return minSkewList
 
-with open("text.txt") as f:
-    data = f.read()
-    print MinimumSkew(data)
+print MinimumSkew("GATACACTTCCCGAGTAGGTACTG")
 

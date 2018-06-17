@@ -27,7 +27,6 @@ def HammingDistance(p, q):
             count += 1
     return count
 
-for thing in  Neighbors("GAACGTAACC",2):
-    print thing
+print len(Neighbors("TGCAT",2))
             
                 
