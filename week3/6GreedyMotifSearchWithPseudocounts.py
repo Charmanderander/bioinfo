@@ -1,14 +1,15 @@
+from fileReader import fileReader
 import itertools
 import operator
 
 nucleotide = ["A","C","G","T"]
 
-def GreedyMotifSearch(Dna, k, t):
+def GreedyMotifSearchWithPseudocounts(Dna, k, t, pseudocount):
     firstDna = Dna[0]
 
     bestMotif = [string[:k] for string in Dna]
 
-    for x in range(len(firstDna) - k + 1):
+    for x in range(len(firstDna) - k):
         kmer = firstDna[x:x+k]
         candidateMotif = []
         candidateMotif.append(kmer)
@@ -41,22 +42,48 @@ def Score(motif):
     return motifScore
 
 def ProfileMaker(motif):
-    nucCollection = []
-    profile = {"A":[], "C":[], "G":[], "T":[]}
 
+    nucCollection = MakeNucCollection(motif)   
+
+    nucCollection = LaplaceROS(nucCollection)
+ 
+    profile = ProfileProbMatrix(nucCollection)
+
+    return profile
+
+def LaplaceROS(nucCol):
+    for item in nucCol:
+        for nuc in nucleotide:
+            if nuc not in item:
+                for stuff in nucCol:
+                    stuff.append("A")
+                    stuff.append("C")
+                    stuff.append("G")
+                    stuff.append("T")
+                return nucCol
+    return nucCol
+
+def ProfileProbMatrix(nucCollection):
+    profile = {"A":[], "C":[], "G":[], "T":[]}
+    for idx, nucCol in enumerate(nucCollection):
+        length = float(len(nucCol))
+        for nuc in nucleotide:
+            probability = (float(nucCol.count(nuc)) / length)
+            profile[nuc].append(probability)
+    return profile    
+
+def MakeNucCollection(motif):
+    nucCollection = []
+    
     for i in motif[0]:
         nucCollection.append([])
-
+    
     for kmer in motif:
         for idx, nuc in enumerate(kmer):
             nucCollection[idx].append(nuc)
-
-    for idx, nucCol in enumerate(nucCollection):
-        for nuc in nucleotide:
-            probability = (float(nucCol.count(nuc)) / float(len(nucCol)))
-            profile[nuc].append(probability)
-
-    return profile
+    
+    return nucCollection 
+    
 
 def MostCommon(L):
     # get an iterable of (item, iterable) pairs
@@ -97,3 +124,12 @@ def ProfileMostProbableKmer(text, k, profile):
         probKmer = initialProbKmer
 
     return probKmer
+
+stringList = fileReader()
+k = 12
+t = 25
+
+output =  GreedyMotifSearchiWithPseudocounts(stringList, k, t)
+
+for item in output:
+    print item
