@@ -9,11 +9,9 @@ def MedianString(Dna, k):
     for x in range(int(math.pow(4,k))):
         Pattern = NumberToPattern(x,k)
         curDist = DistanceBetweenPatternAndStrings(Pattern, Dna)
-        print "###"
-        print "Pattern: " + Pattern
-        print "curDis: " + str(curDist) + " distance: " + str(distance)
         if curDist < distance:
             distance = curDist
+            print Pattern
             Median = Pattern
 
     return Median
@@ -50,8 +48,6 @@ def NumberToPattern(index, k):
 
 stringList = fileReader()
 
-print stringList
-
-k = 3
+k = 7
 
 print MedianString(stringList, k)
