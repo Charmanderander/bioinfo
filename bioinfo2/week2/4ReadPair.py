@@ -22,8 +22,11 @@ def GeneratePairDict(dataset):
         for string in pairs:
             prefixString += Prefix(string)
             suffixString += Suffix(string)
-        
-        pairDict[prefixString] = [suffixString]
+
+        if prefixString in pairDict:
+            pairDict[prefixString].append(suffixString)
+        else:
+            pairDict[prefixString] = [suffixString]
 
     return pairDict
 
@@ -57,16 +60,9 @@ def FindUnbalancedNode(adjDict):
         if outCount[key1] < inCount[key1]:
             unbalancedIn = key1
 
-    print(inCount)
-    print(outCount)
-
     # closing the loop
     if unbalancedIn != "" and unbalancedOut != "":
-        if unbalancedIn!=unbalancedOut:
-            adjDict[unbalancedIn].append(unbalancedOut)
-    else:
-        unbalancedIn = 0
-        unbalancedOut = 0
+        adjDict[unbalancedIn] = [unbalancedOut]
 
     return adjDict, unbalancedOut
 
@@ -106,11 +102,17 @@ def Suffix(string):
 def rotate(l, n):
     return l[n:] + l[:n]
 
-with open("data.txt", "r") as f:
+inputfile = "data.txt"
+
+with open(inputfile, "r") as f:
     data = f.readlines()
 
-k = 3 
-d = 1
+params = data[0].split(" ")
+
+k = int(params[0].strip().replace('\n', ''))
+d = int(params[1].strip().replace('\n', ''))
+
+data.pop(0)
 
 dataList = []
 
@@ -119,29 +121,26 @@ for item in data:
     dataList.append(cleanString)
 
 adjDict = GeneratePairDict(dataList)
-print(adjDict)
+
 newAdjDict, unbalancedOut = FindUnbalancedNode(adjDict)
-print("###")
-print(newAdjDict)
+
 ans = EulerPath(newAdjDict)
 
 ans.pop(0)
 #rotate the list to bring the unbalanced node to the head
 rotated = rotate(ans, ans.index(unbalancedOut))
 
-print(rotated)
-
-ansStr = rotated[0][:k-1]
-
-rotated.pop(0)
+read1 = ""
+read2 = ""
 
 for item in rotated:
-    print(item)
-    ansStr += item[k-2]
+    read1 += item[0]
 
-ansStr += rotated[-k][k-1:]
+for item in rotated:
+    read2 += item[-1]
 
-for item in rotated[-(k-1):]:
-    ansStr += item[-1]
+distance = 2*k + d - 2
+
+ansStr = read1[:distance] + read2
 
 print(ansStr)
