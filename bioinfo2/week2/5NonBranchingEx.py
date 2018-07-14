@@ -8,6 +8,7 @@ def MaximalNonBranchingPaths(adjDict, inCount, outCount):
         if inCount[node] != 1 or outCount[node] != 1:
             if outCount[node] > 0:
                 for outNode in adjDict[node]:
+                    present = 0
                     nonBranchingPath = []
                     nonBranchingPath.append(node)
                     nonBranchingPath.append(outNode)
@@ -18,7 +19,11 @@ def MaximalNonBranchingPaths(adjDict, inCount, outCount):
                         nonBranchingPath.append(nextNode)
                         outNode = nextNode
 
-                    paths.append(nonBranchingPath)
+                    for path in paths:
+                        if sorted(nonBranchingPath) == sorted(path):
+                            present = 1
+                    if not present:
+                        paths.append(nonBranchingPath)
     
         # handling isolated cycles
         if inCount[node] == 1 and outCount[node] == 1:
@@ -109,25 +114,17 @@ for item in data:
     item = item.replace('\n', '').strip()
     cleanData.append(item)
 
-adjData = DeBruijn(cleanData)
+adjData = cleanData
+
+#adjData = DeBruijn(cleanData)
 
 for item in adjData:
-        splitItem = item.split("->")
-        if len(splitItem) > 1:
-          adjDict[item.split("->")[0].strip()] = item.split("->")[1].strip().split(",")
+        adjDict[item.split("->")[0].strip()] = item.split("->")[1].strip().split(",")
 
 inCount, outCount = FindInOutCount(adjDict)
-
+'''
+print adjDict
+'''
 paths = MaximalNonBranchingPaths(adjDict, inCount, outCount)
-
-newPaths = []
-
 for path in paths:
-    result = path[0]
-    path.pop(0)
-    for item in path:
-        result += item[-1]
-    newPaths.append(result)
-
-for path in newPaths:
-    print(path)
+    print(" -> ".join(path))
