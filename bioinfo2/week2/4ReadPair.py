@@ -102,6 +102,40 @@ def Suffix(string):
 def rotate(l, n):
     return l[n:] + l[:n]
 
+def StringSpelledByGappedPatterns(gappedPatterns, k, d):
+    firstPatterns = []
+    secondPatterns = []
+
+    print(gappedPatterns)
+
+    for item in gappedPatterns:
+        firstPatterns.append(item[:k-1])
+        secondPatterns.append(item[-k+1:])
+
+    print(firstPatterns)
+    print(secondPatterns)
+
+    prefixString = StringSpelledByPatterns(firstPatterns, k)
+    suffixString = StringSpelledByPatterns(secondPatterns, k)
+
+    print(prefixString)
+    print(suffixString)
+
+    for x in range(k + d + 1, len(prefixString)):
+        if prefixString[x] != suffixString[x - k - d]:
+            return "no string spelled"
+
+    return prefixString + suffixString[-(k + d):]
+
+def StringSpelledByPatterns(patterns, k):
+    string = ""
+    lastPattern = patterns[-1]
+    patterns.pop(-1)
+    for pattern in patterns:
+        string += pattern[0]
+    string += lastPattern
+    return string
+
 inputfile = "data.txt"
 
 with open(inputfile, "r") as f:
@@ -130,17 +164,6 @@ ans.pop(0)
 #rotate the list to bring the unbalanced node to the head
 rotated = rotate(ans, ans.index(unbalancedOut))
 
-read1 = ""
-read2 = ""
-
-for item in rotated:
-    read1 += item[0]
-
-for item in rotated:
-    read2 += item[-1]
-
-distance = 2*k + d - 2
-
-ansStr = read1[:distance] + read2
+ansStr = StringSpelledByGappedPatterns(rotated, k, d)
 
 print(ansStr)
