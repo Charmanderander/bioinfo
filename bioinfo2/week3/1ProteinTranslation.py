@@ -41,9 +41,25 @@ def ProteinTranslation(RNA):
 
     print(ansStr)
 
+def StringTranslation(string):
+    for x in string:
+        print("Processing " + x)
+        for key in list(geneticCode.keys()):
+            if x == geneticCode[key]:
+                for key2 in list(geneticNames.keys()):
+                    if key == geneticNames[key2]:
+                        print(key2)
+        print("###")
+
 with open("data.txt", "r") as f:
     data = f.readlines()
 
 RNAstring = data[0].replace('\n', '')
 
-ProteinTranslation(RNAstring)
+RNAstrings = ["CCUCGUACAGAAAUCAAC", "CCCAGGACUGAGAUCAAU", "CCCAGUACCGAGAUGAAU", "CCUCGUACUGAUAUUAAU"]
+
+for string in RNAstrings:
+    print("Processing :" + string)
+    ProteinTranslation(string)
+
+#StringTranslation("MASS")
