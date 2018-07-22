@@ -44,6 +44,24 @@ def CyclicSpectrum(peptide):
 
     return sorted(cyclicSpectrum)
 
+def LinearSpectrum(peptide):
+    prefixMass = [0]
+    linearSpectrum = []
+
+    for i in range(len(peptide)):
+        previousMass = prefixMass[i]
+        currentMass = mass[peptide[i]]
+        prefixMass.append(previousMass + currentMass)
+
+    for i in range(len(peptide)):
+        for j in range(i+1,len(peptide)+1,1):
+            massDifference = prefixMass[j] - prefixMass[i]
+            linearSpectrum.append(massDifference)
+
+    linearSpectrum.append(0)
+
+    return sorted(linearSpectrum)
+
 def Score(experimental, theory):
     ansDict = {}
     score = 0
@@ -61,20 +79,27 @@ def Score(experimental, theory):
 
     return score
 
+'''
 with open("data.txt", "r") as f:
     data = f.readlines()
 
 peptide = data[0].replace("\n",'')
 
 theoryList = list(map(int, data[1].replace("\n",'').split(" ")))
+'''
 
+cyclicquestionList = ["MAMA"]
 
-questionList = [peptide]
+cyclictheoryList = [0, 57, 71, 71, 71, 104, 131, 202, 202, 202, 256, 333, 333, 403, 404]
 
-for qns in questionList:
+linearquestionList = ["PEEP"]
+
+lineartheoryList = [0, 97, 97, 129, 194, 196, 226, 226, 244, 258, 323, 323, 452]
+
+for qns in linearquestionList:
     print("Processing " + qns)
-    ansList = CyclicSpectrum(qns)
+    ansList = LinearSpectrum(qns)
 
-score = Score(ansList, theoryList)
+score = Score(ansList, lineartheoryList)
 
-print score 
+print(score)
