@@ -3,6 +3,7 @@
 Contains my code for the two courses on Coursera
 
 [Finding Hidden Messages in DNA (Bioinformatics I)](https://www.coursera.org/learn/dna-analysis)
+
 [Genome Sequencing (Bioinformatics II)](https://www.coursera.org/learn/genome-sequencing)
 
 These codes are correct at the time of writing (or pushing).
